@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rudra Electronics - Billing System</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* --- LOGIN OVERLAY --- */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            font-size: 16px;
+        }
+        .login-box button:hover {
+            background: #5a67d8;
+        }
+        #login-error {
+            color: red;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none; /* Hidden by default */
+        }
+        /* --- END LOGIN OVERLAY --- */
+
+        /* Make app containers hidden by default */
+        .search-container, .container, .export-section {
+            display: none; 
+        }
+
+        .search-container {
+            max-width: 1000px;
+            margin: 0 auto 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .search-container button.logout-btn {
+            background: #dc3545; /* Red */
+            color: white;
+            margin-left: auto; /* Pushes it to the right */
+        }
+        .search-container button.logout-btn:hover {
+             background: #c82333;
+        }
+
+
+        #search-invoice-number {
+            flex-grow: 1;
+            padding: 12px;
+        }
+
+        .search-container button {
+            padding: 12px 20px;
+            background: #ffc107;
+            color: black;
+            border: none;
+        }
+
+        .search-container button:hover {
+            background: #e0a800;
+        }
+
+        .search-container button.new-bill-btn {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .search-container button.new-bill-btn:hover {
+            background: #138496;
+        }
+
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .logo-section {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .shop-name {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        .shop-email {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .invoice-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .invoice-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .invoice-date {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        #created-by {
+            font-size: 14px;
+            color: #555;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .product-input {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .add-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .add-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        /* --- NEW EDIT BUTTON STYLE --- */
+        .edit-btn {
+            background: #ffc107; /* Yellow */
+            color: black;
+            padding: 5px 10px;
+            margin-right: 5px; /* Add space between buttons */
+        }
+        .edit-btn:hover {
+            background: #e0a800;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        /* --- NEW: Ensure action buttons fit --- */
+        td:last-child {
+            width: 140px; /* Adjust as needed */
+            white-space: nowrap;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .totals-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+        }
+
+        .totals-box {
+            min-width: 300px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 16px;
+        }
+
+        .total-row.grand-total {
+            border-top: 2px solid #667eea;
+            margin-top: 10px;
+            padding-top: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .discount-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff3cd;
+            border-radius: 5px;
+        }
+
+        .discount-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .export-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #ddd;
+        }
+
+        .export-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+        }
+
+        .save-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #0056b3;
+        }
+
+        .pdf-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .pdf-btn:hover {
+            background: #c82333;
+        }
+
+        .excel-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .excel-btn:hover {
+            background: #218838;
+        }
+
+        .doc-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .doc-btn:hover {
+            background: #5a6268;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .keyboard-hint {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #004085;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .login-overlay,
+            .search-container {
+                display: none;
+            }
+
+            .container {
+                display: block; 
+                box-shadow: none;
+            }
+
+            .input-section,
+            .export-section,
+            button,
+            .keyboard-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-overlay" id="login-container">
+        <div class="login-box">
+            <h2>Rudra Electronics Login</h2>
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button id="login-btn">Login</button>
+            <p id="login-error">Invalid username or password.</p>
+        </div>
+    </div>
+
+    <div class="search-container" id="search-bar">
+        <input type="text" id="search-invoice-number" placeholder="Enter Invoice No. to Fetch (e.g., RI25-0001)">
+        <button id="fetch-bill-btn">🔍 Fetch Bill</button>
+        <button class="new-bill-btn" id="new-bill-btn">➕ New Bill</button>
+        <button class="logout-btn" id="logout-btn">Logout</button>
+    </div>
+
+    <div class="container" id="invoice-container">
+        <div class="header">
+            <div class="logo-section">
+                <div class="shop-name">RUDRA ELECTRONICS AND ACCESSORIES</div>
+                <div style="font-size: 16px; margin-top: 5px;">Shop no.2 Khadi Machine, Kumbhari, Solapur</div>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <strong>Tarun Mhanta</strong><br>
+                        📞 +91 9021640473
+                    </div>
+                    <div class="contact-item">
+                        <strong>Pravin Fulpati</strong><br>
+                        📞 +91 7083377344
+                    </div>
+                </div>
+                <div class="shop-email">
+                    📧 info.rudra.sur@gmail.com
+                </div>
+            </div>
+
+            <div class="invoice-details">
+                <div>
+                    <div class="invoice-number">Invoice No: <span id="invoice-number">Loading...</span></div>
+                    <div class="invoice-date">Date: <span id="invoice-date"></span></div>
+                    <p id="created-by"></p>
+                </div>
+                <div>
+                    <input type="text" placeholder="Customer Name" id="customer-name" class="customer-field"
+                        style="margin-bottom: 5px;">
+                    <input type="text" placeholder="Customer Mobile" id="customer-mobile" class="customer-field">
+                </div>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <div class="keyboard-hint">
+                ⌨️ <strong>Keyboard Navigation:</strong>
+                Press <strong>Enter</strong> to move next |
+                Press <strong>Backspace</strong> (on empty field) to go back |
+                Press <strong>Shift+Enter</strong> from product section to move to discount
+            </div>
+
+            <h3 style="margin-bottom: 15px; color: #667eea;">Add Products</h3>
+            <div class="product-input">
+                <input type="text" id="product-name" class="product-field" placeholder="Product Name">
+                <input type="number" id="product-quantity" class="product-field" placeholder="Quantity" min="1">
+                <input type="number" id="product-price" class="product-field" placeholder="Price (₹)" min="0">
+                <button class="add-btn" id="add-product-btn">➕ Add</button>
+            </div>
+
+            <div class="discount-section">
+                <strong>Discount:</strong>
+                <div class="discount-input">
+                    <input type="number" id="discount-amount" class="discount-field" placeholder="Discount Amount (₹)"
+                        min="0" step="0.01" onchange="calculateTotal()">
+                    <span>OR</span>
+                    <input type="number" id="discount-percent" class="discount-field" placeholder="Discount (%)" min="0"
+                        max="100" step="0.01" onchange="applyPercentDiscount()">
+                </div>
+            </div>
+        </div>
+
+        <table id="products-table">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price (₹)</th>
+                    <th>Total (₹)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="products-body">
+                </tbody>
+        </table>
+
+        <div class="totals-section">
+            <div class="totals-box">
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span>₹<span id="subtotal">0.00</span></span>
+                </div>
+                <div class="total-row">
+                    <span>Discount:</span>
+                    <span>₹<span id="discount-display">0.00</span></span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Grand Total:</span>
+                    <span>₹<span id="grand-total">0.00</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Thank you for your business!</strong></p>
+            <p>For any queries, please contact us at the numbers above.</p>
+        </div>
+    </div>
+
+    <div class="export-section" id="export-buttons">
+        <button class="export-btn save-btn" id="save-btn">💾 Save to Sheet</button>
+        <button class="export-btn pdf-btn" id="pdf-btn">📄 Export to PDF</button>
+        <button class="export-btn excel-btn" id="excel-btn">📊 Export to Excel</button>
+        <button class="export-btn doc-btn" id="doc-btn">📝 Export to DOC</button>
+    </div>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbzWoAo9lN4_OLUycdYnQGkjO6WFZkz2wHRERmoO6lGUZc5j-THykzI-jZKzj0MiTdZRdA/exec"; // 🔥 Replace this
+
+        let productCount = 0;
+        let products = [];
+        let currentUser = null; 
+
+        // --- Main init function ---
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Attach all event listeners
+            document.getElementById('login-btn').addEventListener('click', handleLogin);
+            document.getElementById('fetch-bill-btn').addEventListener('click', fetchBillData);
+            document.getElementById('new-bill-btn').addEventListener('click', newBill);
+            document.getElementById('logout-btn').addEventListener('click', handleLogout);
+            document.getElementById('add-product-btn').addEventListener('click', addProduct);
+            
+            // Export buttons
+            document.getElementById('save-btn').addEventListener('click', saveToSheet);
+            document.getElementById('pdf-btn').addEventListener('click', exportToPDF);
+            document.getElementById('excel-btn').addEventListener('click', exportToExcel);
+            document.getElementById('doc-btn').addEventListener('click', exportToDoc);
+
+            // Attach global listeners
+            document.addEventListener('keydown', handleKeydown);
+            window.addEventListener('load', () => {
+                 if(document.getElementById('invoice-container').style.display === 'block') {
+                    document.getElementById('customer-name').focus();
+                 }
+            });
+
+            // Start the app
+            checkSession();
+        });
+
+
+        // --- LOGIN & SESSION FUNCTIONS ---
+        function checkSession() {
+            const loggedInUser = sessionStorage.getItem('rudraUser');
+            if (loggedInUser) {
+                currentUser = loggedInUser;
+                showApp();
+            } else {
+                showLogin();
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('login-container').style.display = 'flex';
+            document.getElementById('search-bar').style.display = 'none';
+            document.getElementById('invoice-container').style.display = 'none';
+            document.getElementById('export-buttons').style.display = 'none';
+            document.getElementById('username').focus();
+        }
+
+        function showApp() {
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('search-bar').style.display = 'flex'; 
+            document.getElementById('invoice-container').style.display = 'block';
+            document.getElementById('export-buttons').style.display = 'flex';
+            
+            fetchInvoiceNumber();
+            document.getElementById('customer-name').focus();
+        }
+
+        async function handleLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const loginBtn = document.getElementById('login-btn');
+            const errorMsg = document.getElementById('login-error');
+
+            if (!user || !pass) {
+                alert("Please enter both username and password.");
+                return;
+            }
+
+            loginBtn.textContent = "Logging in...";
+            loginBtn.disabled = true;
+            errorMsg.style.display = 'none';
+
+            const payload = {
+                action: "login",
+                data: { user, pass }
+            };
+
+            try {
+                const res = await fetch(scriptURL, {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+
+                if (result.status === "success") {
+                    sessionStorage.setItem('rudraUser', result.username);
+                    currentUser = result.username;
+                    showApp();
+                } else {
+                    errorMsg.textContent = result.message;
+                    errorMsg.style.display = 'block';
+                }
+
+            } catch (e) {
+                errorMsg.textContent = "Error: " + e.message;
+                errorMsg.style.display = 'block';
+            }
+
+            loginBtn.textContent = "Login";
+            loginBtn.disabled = false;
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('rudraUser');
+            currentUser = null;
+            location.reload(); 
+        }
+        
+        // --- BILLING FUNCTIONS ---
+
+        // Set current date
+        document.getElementById('invoice-date').textContent = new Date().toLocaleDateString('en-IN');
+
+        async function fetchInvoiceNumber() {
+            try {
+                const res = await fetch(scriptURL);
+                const data = await res.json();
+                document.getElementById('invoice-number').textContent = data.invoiceNumber || "N/A";
+                document.getElementById('created-by').textContent = '';
+            } catch (e) {
+                alert("Error fetching invoice from Google Sheets!");
+                document.getElementById('invoice-number').textContent = "Error";
+            }
+        }
+
+        function newBill() {
+            location.reload();
+        }
+        
+        async function fetchBillData() {
+            const invoiceNumber = document.getElementById('search-invoice-number').value.trim();
+            if (!invoiceNumber) {
+                alert("Please enter an invoice number to fetch.");
+                return;
+            }
+
+            const fetchButton = document.getElementById('fetch-bill-btn');
+            fetchButton.textContent = "Fetching...";
+            fetchButton.disabled = true;
+
+            try {
+                const fetchUrl = scriptURL + '?invoice=' + encodeURIComponent(invoiceNumber);
+                const res = await fetch(fetchUrl);
+                const result = await res.json();
+
+                if (result.status === "success") {
+                    populateForm(result.data);
+                } else {
+                    alert(result.message);
+                }
+
+            } catch (e) {
+                alert("An error occurred while fetching the bill: " + e.message);
+            }
+
+            fetchButton.textContent = "🔍 Fetch Bill";
+            fetchButton.disabled = false;
+        }
+
+        function populateForm(data) {
+            products = [];
+            productCount = 0;
+            const tbody = document.getElementById('products-body');
+            tbody.innerHTML = '';
+            document.getElementById('discount-percent').value = '';
+
+            document.getElementById('invoice-number').textContent = data.invoiceNo;
+            document.getElementById('invoice-date').textContent = data.date;
+            document.getElementById('customer-name').value = data.customerName;
+            document.getElementById('customer-mobile').value = data.customerMobile;
+            document.getElementById('discount-amount').value = data.discount;
+            document.getElementById('created-by').textContent = 'Bill created by: ' + (data.createdBy || 'N/A');
+
+            try {
+                const fetchedProducts = JSON.parse(data.items);
+                fetchedProducts.forEach((p, index) => {
+                    products.push(p); 
+                    productCount++;
+                    const row = tbody.insertRow();
+                    row.id = 'row-' + p.id; 
+                    
+                    // --- MODIFIED: Added Edit Button ---
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${p.name}</td>
+                        <td>${p.qty}</td>
+                        <td>₹${p.price.toFixed(2)}</td>
+                        <td>₹${p.total.toFixed(2)}</td>
+                        <td>
+                            <button class="edit-btn" onclick="editProduct(${p.id})">✏️ Edit</button>
+                            <button class="delete-btn" onclick="deleteProduct(${p.id})">🗑️ Delete</button>
+                        </td>
+                    `;
+                });
+                productCount = products.length;
+            } catch (e) {
+                alert("Error parsing product items. Bill may be corrupt.");
+            }
+            calculateTotal();
+        }
+        
+        // --- KEYDOWN LISTENER ---
+        function handleKeydown(e) {
+            const target = e.target;
+            
+            if(target.id === 'username' && e.key === 'Enter') {
+                document.getElementById('password').focus();
+            }
+            if(target.id === 'password' && e.key === 'Enter') {
+                handleLogin();
+            }
+            
+            if (target.classList.contains('customer-field')) {
+                const customerFields = Array.from(document.querySelectorAll('.customer-field'));
+                const currentIndex = customerFields.indexOf(target);
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (currentIndex === customerFields.length - 1) {
+                        document.getElementById('product-name').focus();
+                    } else {
+                        customerFields[currentIndex + 1].focus();
+                    }
+                }
+                if (e.key === 'Backspace' && target.value === '') {
+                    e.preventDefault();
+                    if (currentIndex > 0) {
+                        customerFields[currentIndex - 1].focus();
+                    }
+                }
+            }
+            if (target.classList.contains('product-field')) {
+                const productFields = Array.from(document.querySelectorAll('.product-field'));
+                const currentIndex = productFields.indexOf(target);
+                if (e.key === 'Enter' && e.shiftKey) {
+                    e.preventDefault();
+                    document.getElementById('discount-amount').focus();
+                    return;
+                }
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (target.id === 'product-price') {
+                        addProduct();
+                        document.getElementById('product-name').focus();
+                    } else if (currentIndex < productFields.length - 1) {
+                        productFields[currentIndex + 1].focus();
+                    }
+                }
+                if (e.key === 'Backspace' && target.value === '') {
+                    e.preventDefault();
+                    if (currentIndex > 0) {
+                        productFields[currentIndex - 1].focus();
+                    } else {
+                        document.getElementById('customer-mobile').focus();
+                    }
+                }
+            }
+            if (target.classList.contains('discount-field')) {
+                const discountFields = Array.from(document.querySelectorAll('.discount-field'));
+                const currentIndex = discountFields.indexOf(target);
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (currentIndex < discountFields.length - 1) {
+                        discountFields[currentIndex + 1].focus();
+                    }
+                }
+                if (e.key === 'Backspace' && target.value === '0') {
+                    e.preventDefault();
+                    if (currentIndex > 0) {
+                        discountFields[currentIndex - 1].focus();
+                    } else {
+                        document.getElementById('product-price').focus();
+                    }
+                }
+            }
+        }
+
+        // --- MODIFIED: addProduct ---
+        function addProduct() {
+            const name = document.getElementById('product-name').value;
+            const quantity = parseFloat(document.getElementById('product-quantity').value);
+            const price = parseFloat(document.getElementById('product-price').value);
+
+            if (!name || !quantity || !price) {
+                alert('Please fill all product fields!');
+                return;
+            }
+
+            productCount++;
+            const total = price * quantity;
+
+            const product = {
+                id: productCount,
+                name: name,
+                qty: quantity,
+                price: price,
+                total: total
+            };
+
+            products.push(product);
+
+            const tbody = document.getElementById('products-body');
+            const row = tbody.insertRow();
+            row.id = 'row-' + product.id;
+            
+            // --- MODIFIED: Added Edit Button ---
+            row.innerHTML = `
+                <td>${tbody.rows.length}</td> 
+                <td>${name}</td>
+                <td>${quantity}</td>
+                <td>₹${price.toFixed(2)}</td>
+                <td>₹${total.toFixed(2)}</td>
+                <td>
+                    <button class="edit-btn" onclick="editProduct(${product.id})">✏️ Edit</button>
+                    <button class="delete-btn" onclick="deleteProduct(${product.id})">🗑️ Delete</button>
+                </td>
+            `;
+
+            document.getElementById('product-name').value = '';
+            document.getElementById('product-quantity').value = '';
+            document.getElementById('product-price').value = '';
+
+            calculateTotal();
+            applyPercentDiscount();
+        }
+
+        // --- NEW FUNCTION: editProduct ---
+        function editProduct(id) {
+            // Find the product in the global 'products' array
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            // 1. Populate the top input fields
+            document.getElementById('product-name').value = product.name;
+            document.getElementById('product-quantity').value = product.qty;
+            document.getElementById('product-price').value = product.price;
+
+            // 2. Focus the product name field to start editing
+            document.getElementById('product-name').focus();
+
+            // 3. Remove the item from the table and array
+            // This re-uses the delete logic to keep everything in sync
+            deleteProduct(id);
+        }
+
+        function deleteProduct(id) {
+            const row = document.getElementById('row-' + id);
+            if (row) row.remove();
+            products = products.filter(p => p.id !== id);
+
+            // Re-number the S.No column
+            const rows = document.getElementById('products-body').rows;
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].cells[0].textContent = i + 1;
+            }
+            productCount = rows.length; 
+
+            calculateTotal();
+            applyPercentDiscount();
+        }
+
+        function calculateTotal() {
+            let subtotal = 0;
+            products.forEach(product => {
+                subtotal += product.total;
+            });
+
+            const percent = parseFloat(document.getElementById('discount-percent').value);
+            let discount;
+            if (percent > 0) {
+                discount = (subtotal * percent) / 100;
+                document.getElementById('discount-amount').value = discount.toFixed(2);
+            } else {
+                discount = parseFloat(document.getElementById('discount-amount').value) || 0;
+            }
+
+            const grandTotal = subtotal - discount;
+
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+            document.getElementById('discount-display').textContent = discount.toFixed(2);
+            document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
+        }
+
+        function applyPercentDiscount() {
+            const percent = parseFloat(document.getElementById('discount-percent').value);
+            
+            if (percent > 0) {
+                const subtotal = parseFloat(document.getElementById('subtotal').textContent) || 0;
+                const discountAmount = (subtotal * percent) / 100;
+                document.getElementById('discount-amount').value = discountAmount.toFixed(2);
+            } else if (percent === 0) {
+                document.getElementById('discount-amount').value = '0';
+            }
+
+            calculateTotal();
+        }
+        
+        async function saveToSheet(event) {
+            if (products.length === 0) {
+                alert("Cannot save an empty bill. Please add products.");
+                return;
+            }
+
+            const billData = {
+                invoiceNo: document.getElementById('invoice-number').textContent,
+                date: document.getElementById('invoice-date').textContent,
+                customerName: document.getElementById('customer-name').value || "N/A",
+                customerMobile: document.getElementById('customer-mobile').value || "N/A",
+                items: products,
+                subtotal: document.getElementById('subtotal').textContent,
+                discount: document.getElementById('discount-amount').value || "0",
+                grandTotal: document.getElementById('grand-total').textContent,
+                username: currentUser 
+            };
+
+            const payload = {
+                action: "saveBill",
+                data: billData
+            };
+            
+            const saveButton = event.target;
+            saveButton.textContent = "Saving...";
+            saveButton.disabled = true;
+
+            try {
+                const res = await fetch(scriptURL, { 
+                    method: "POST", 
+                    body: JSON.stringify(payload) 
+                });
+                const result = await res.json();
+                
+                if (result.status === "success") {
+                    alert("✅ Bill saved to Google Sheet!");
+                } else {
+                    alert("❌ Error saving to Sheet: " + result.message);
+                }
+
+            } catch (e) {
+                alert("❌ Error saving to Sheet!");
+            }
+
+            saveButton.textContent = "💾 Save to Sheet";
+            saveButton.disabled = false;
+        }
+
+
+        // --- EXPORT FUNCTIONS (with date fix) ---
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const invoiceNum = String(document.getElementById('invoice-number').textContent);
+            
+            // Format the date correctly
+            const rawDate = String(document.getElementById('invoice-date').textContent);
+            const invoiceDate = new Date(rawDate).toLocaleDateString('en-IN');
+            
+            const customerName = String(document.getElementById('customer-name').value || 'N/A');
+            const customerMobile = String(document.getElementById('customer-mobile').value || 'N/A');
+
+            const subtotal = String(document.getElementById('subtotal').textContent);
+            const discount = String(document.getElementById('discount-display').textContent);
+            const grandTotal = String(document.getElementById('grand-total').textContent);
+            const discountValue = parseFloat(discount) || 0;
+
+            const tableData = products.map((product, index) => [
+                String(index + 1),
+                String(product.name),
+                String(product.qty),
+                String('Rs.' + product.price.toFixed(2)),
+                String('Rs.' + product.total.toFixed(2))
+            ]);
+
+            const footerData = [
+                ['', '', '', 'Subtotal:', String('Rs.' + subtotal)]
+            ];
+            if (discountValue > 0) {
+                footerData.push(['', '', '', 'Discount:', String('Rs.' + discount)]);
+            }
+            footerData.push(['', '', '', 'Grand Total:', String('Rs.' + grandTotal)]);
+
+            doc.autoTable({
+                startY: 70,
+                head: [['S.No', 'Product Name', 'Quantity', 'Price', 'Total']],
+                body: tableData,
+                foot: footerData,
+                theme: 'grid',
+                showHead: 'everyPage',
+                showFoot: 'lastPage',
+                styles: { fontSize: 10, cellPadding: 3, font: 'helvetica' },
+                headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold', lineWidth: 0.5, lineColor: [0, 0, 0] },
+                bodyStyles: { textColor: [0, 0, 0], lineWidth: 0.3, lineColor: [0, 0, 0] },
+                footStyles: { fillColor: [245, 245, 245], textColor: [0, 0, 0], fontStyle: 'bold', lineWidth: 0.5, lineColor: [0, 0, 0], halign: 'right' },
+                columnStyles: { 4: { halign: 'right' } },
+                didDrawPage: function (data) {
+                    // Header
+                    doc.setFontSize(20);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('RUDRA ELECTRONICS AND ACCESSORIES', 105, 15, { align: 'center' });
+                    doc.setFontSize(10);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('Shop no.2 Khadi Machine, Kumbhari, Solapur', 105, 23, { align: 'center' });
+                    doc.setFontSize(9);
+                    doc.text('Tarun Mhanta: +91 9021640473  |  Pravin Fulpati: +91 7083377344', 105, 30, { align: 'center' });
+                    doc.text('Email: info.rudra.sur@gmail.com', 105, 35, { align: 'center' });
+                    doc.line(15, 40, 195, 40);
+                    doc.setFontSize(11);
+                    doc.setFont(undefined, 'bold');
+                    doc.text('Invoice No: ' + invoiceNum, 15, 50);
+                    doc.text('Date: ' + invoiceDate, 15, 57); // Use formatted date
+                    
+                    // Customer Details
+                    function splitTextToSize(text, maxLength) {
+                        if (!text || text.length <= maxLength) return [text || ''];
+                        let result = [];
+                        let words = text.split(' ');
+                        let line = '';
+                        for (let word of words) {
+                            if ((line + ' ' + word).trim().length > maxLength) {
+                                result.push(line.trim());
+                                line = word;
+                            } else {
+                                line += ' ' + word;
+                            }
+                        }
+                        if (line) result.push(line.trim());
+                        return result;
+                    }
+                    let nameLines = splitTextToSize('Customer Name: ' + customerName, 35);
+                    doc.text(nameLines[0], 120, 50);
+                    if (nameLines[1]) doc.text(nameLines[1], 120, 55);
+                    doc.text('Mobile: ' + customerMobile, 120, 57 + (nameLines.length > 1 ? 5 : 0));
+                    doc.line(15, 63, 195, 63);
+
+                    // Page Number
+                    const pageCount = doc.internal.getNumberOfPages();
+                    doc.setFontSize(9);
+                    doc.setFont(undefined, 'normal');
+                    doc.text('Page ' + String(data.pageNumber) + ' of ' + String(pageCount), 195, 285, { align: 'right' });
+                },
+                margin: { top: 70 }
+            });
+            
+            // Thank you message
+            const finalY = doc.lastAutoTable.finalY + 15;
+            doc.setFont(undefined, 'bold');
+            doc.setFontSize(11);
+            doc.text('Thank you for your business!', 105, finalY, { align: 'center' });
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(9);
+            doc.text('For any queries, please contact us at the numbers above.', 105, finalY + 7, { align: 'center' });
+            
+            doc.save('Invoice_' + invoiceNum + '.pdf');
+        }
+
+        function exportToExcel() {
+            const invoiceNum = document.getElementById('invoice-number').textContent;
+            const customerName = document.getElementById('customer-name').value || 'N/A';
+            const customerMobile = document.getElementById('customer-mobile').value || 'N/A';
+            
+            // Format the date correctly
+            const rawDate = String(document.getElementById('invoice-date').textContent);
+            const date = new Date(rawDate).toLocaleDateString('en-IN');
+            
+            const excelData = [
+                ['RUDRA ELECTRONICS AND ACCESSORIES'],
+                ['Shop no.2 Khadi Machine, Kumbhari, Solapur'],
+                ['Tarun Mhanta: +91 9021640473  |  Pravin Fulpati: +91 7083377344'],
+                ['Email: info.rudra.sur@gmail.com'],
+                [''],
+                ['Invoice Number:', invoiceNum, '', 'Date:', date], // Use formatted date
+                ['Customer Name:', customerName, '', 'Mobile:', customerMobile],
+                [''],
+                ['S.No', 'Product Name', 'Quantity', 'Price (Rs.)', 'Total (Rs.)']
+            ];
+            products.forEach((product, index) => {
+                excelData.push([
+                    index + 1,
+                    product.name,
+                    product.qty,
+                    product.price.toFixed(2),
+                    product.total.toFixed(2)
+                ]);
+            });
+
+            excelData.push([]);
+            excelData.push(['', '', '', 'Subtotal:', document.getElementById('subtotal').textContent]);
+            const discountValue = parseFloat(document.getElementById('discount-display').textContent) || 0;
+            if (discountValue > 0) {
+                 excelData.push(['', '', '', 'Discount:', document.getElementById('discount-display').textContent]);
+            }
+            excelData.push(['', '', '', 'Grand Total:', document.getElementById('grand-total').textContent]);
+            
+            excelData.push([]);
+            excelData.push(['Thank you for your business!']);
+            excelData.push(['For any queries, please contact us at the numbers above.']);
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            ws['!cols'] = [{ wch: 8 }, { wch: 30 }, { wch: 10 }, { wch: 15 }, { wch: 15 }];
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Invoice');
+            XLSX.writeFile(wb, `Invoice_${invoiceNum}.xlsx`);
+        }
+
+        function exportToDoc() {
+            const invoiceNum = document.getElementById('invoice-number').textContent;
+            
+            // Format the date correctly
+            const rawDate = String(document.getElementById('invoice-date').textContent);
+            const invoiceDate = new Date(rawDate).toLocaleDateString('en-IN');
+            
+            const customerName = document.getElementById('customer-name').value || 'N/A';
+            const customerMobile = document.getElementById('customer-mobile').value || 'N/A';
+            const subtotal = document.getElementById('subtotal').textContent;
+            const discount = document.getElementById('discount-display').textContent;
+            const grandTotal = document.getElementById('grand-total').textContent;
+            const discountValue = parseFloat(discount) || 0;
+
+            let productRows = '';
+            products.forEach((product, index) => {
+                productRows += `
+                <tr>
+                    <td style="border: 1px solid black; padding: 5px;">${index + 1}</td>
+                    <td style="border: 1px solid black; padding: 5px;">${product.name}</td>
+                    <td style="border: 1px solid black; padding: 5px;">${product.qty}</td>
+                    <td style="border: 1px solid black; padding: 5px;">Rs.${product.price.toFixed(2)}</td>
+                    <td style="border: 1px solid black; padding: 5px;">Rs.${product.total.toFixed(2)}</td>
+                </tr>
+            `;
+            });
+
+            let discountRow = '';
+            if (discountValue > 0) {
+                discountRow = `<p><strong>Discount:</strong> Rs.${discount}</p>`;
+            }
+
+            const docContent = `
+            <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+            <head><meta charset='utf-8'><title>Invoice</title></head>
+            <body style="font-family: Arial, sans-serif; color: black; background: white; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="margin: 0;">RUDRA ELECTRONICS AND ACCESSORIES</h1>
+                    <p style="margin: 5px 0;">Shop no.2 Khadi Machine, Kumbhari, Solapur</p>
+                    <p style="margin: 5px 0; font-size: 14px;">Tarun Mhanta: +91 9021640473  |  Pravin Fulpati: +91 7083377344</p>
+                    <p style="margin: 5px 0; font-size: 14px;">Email: info.rudra.sur@gmail.com</p>
+                    <hr style="border: 1px solid black; margin: 20px 0;">
+                </div>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <tr>
+                        <td style="padding: 5px; vertical-align: top;">
+                            <p><strong>Invoice No:</strong> ${invoiceNum}</p>
+                            <p><strong>Date:</strong> ${invoiceDate}</p> </td>
+                        <td style="padding: 5px; vertical-align: top; text-align: right;">
+                             <p><strong>Customer Name:</strong> ${customerName}</p>
+                             <p><strong>Mobile:</strong> ${customerMobile}</p>
+                        </td>
+                    </tr>
+                </table>
+                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                    <thead>
+                        <tr style="background-color: #f0f0f0;">
+                            <th style="border: 1px solid black; padding: 8px;">S.No</th>
+                            <th style="border: 1px solid black; padding: 8px;">Product Name</th>
+                            <th style="border: 1px solid black; padding: 8px;">Quantity</th>
+                            <th style="border: 1px solid black; padding: 8px;">Price (Rs.)</th>
+                            <th style="border: 1px solid black; padding: 8px;">Total (Rs.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${productRows}
+                    </tbody>
+                </table>
+                <div style="text-align: right; margin-top: 30px;">
+                    <p><strong>Subtotal:</strong> Rs.${subtotal}</p>
+                    ${discountRow} <hr style="border: 1px solid black; width: 200px; margin-left: auto;">
+                    <p style="font-size: 18px;"><strong>Grand Total: Rs.${grandTotal}</strong></p>
+                </div>
+                <div style="text-align: center; margin-top: 50px; border-top: 1px solid black; padding-top: 20px;">
+                    <p><strong>Thank you for your business!</strong></p>
+                    <p>For any queries, please contact us at the numbers above.</p>
+                </div>
+            </body>
+            </html>
+        `;
+            const blob = new Blob(['\ufeff', docContent], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Invoice_${invoiceNum}.doc`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+
+</html>
