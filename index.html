@@ -16,9 +16,11 @@
     <style>
         /* --- MODERN DASHBOARD CSS --- */
         :root {
-            --primary: #4f46e5; /* Indigo 600 */
+            --primary: #4f46e5;
+            /* Indigo 600 */
             --primary-hover: #4338ca;
-            --bg: #f1f5f9; /* Slate 100 */
+            --bg: #f1f5f9;
+            /* Slate 100 */
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-light: #64748b;
@@ -28,93 +30,331 @@
             --warning: #f59e0b;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-        body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
         /* Utils */
-        .hidden { display: none !important; }
-        .flex { display: flex; gap: 10px; align-items: center; }
-        .flex-col { display: flex; flex-direction: column; gap: 10px; }
-        .w-full { width: 100%; }
-        .text-right { text-align: right; }
-        .mb-4 { margin-bottom: 1rem; }
+        .hidden {
+            display: none !important;
+        }
+
+        .flex {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .flex-col {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
 
         /* Inputs */
         input {
-            padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; width: 100%; outline: none; transition: 0.2s;
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            width: 100%;
+            outline: none;
+            transition: 0.2s;
         }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
 
         /* Buttons */
         button {
-            padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s;
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-hover); }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-outline:hover { background: #f8fafc; border-color: #cbd5e1; }
-        .btn-icon { padding: 8px; aspect-ratio: 1; }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .btn-icon {
+            padding: 8px;
+            aspect-ratio: 1;
+        }
 
         /* Login Overlay */
         .login-overlay {
-            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px);
-            display: flex; justify-content: center; align-items: center; z-index: 2000;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
         }
+
         .login-card {
-            background: var(--card-bg); padding: 2.5rem; border-radius: 16px; width: 100%; max-width: 380px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); text-align: center;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
-        .login-header i { font-size: 48px; color: var(--primary); margin-bottom: 15px; }
+
+        .login-header i {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
 
         /* Navbar */
         .navbar {
-            background: var(--card-bg); border-bottom: 1px solid var(--border); padding: 15px 30px;
-            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .brand { font-size: 1.25rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
-        .brand i { color: var(--primary); }
-        
-        .search-bar-nav { flex: 1; max-width: 450px; margin: 0 2rem; display: flex; gap: 8px; }
+
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand i {
+            color: var(--primary);
+        }
+
+        .search-bar-nav {
+            flex: 1;
+            max-width: 450px;
+            margin: 0 2rem;
+            display: flex;
+            gap: 8px;
+        }
 
         /* Main Layout */
-        .main-content { max-width: 1400px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 3fr 1.2fr; gap: 2rem; }
-        
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 3fr 1.2fr;
+            gap: 2rem;
+        }
+
         /* Cards */
-        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 1.5rem; }
-        .card-header { font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
         /* Table */
-        .table-wrapper { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--text-light); padding: 12px 10px; border-bottom: 1px solid var(--border); background: #f8fafc; }
-        td { padding: 12px 10px; font-size: 14px; border-bottom: 1px solid var(--border); color: var(--text-main); vertical-align: middle; }
-        tr:last-child td { border-bottom: none; }
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-light);
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--border);
+            background: #f8fafc;
+        }
+
+        td {
+            padding: 12px 10px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-main);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
 
         /* Inventory Page */
-        .inventory-wrapper { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .inventory-wrapper {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
 
         /* Totals Panel */
-        .summary-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; color: var(--text-light); align-items: center; }
-        .summary-total { border-top: 2px dashed var(--border); margin-top: 10px; padding-top: 15px; font-size: 1.25rem; font-weight: 700; color: var(--primary); display: flex; justify-content: space-between; }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            color: var(--text-light);
+            align-items: center;
+        }
+
+        .summary-total {
+            border-top: 2px dashed var(--border);
+            margin-top: 10px;
+            padding-top: 15px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+        }
 
         /* Print */
-        .print-only { display: none; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .print-only {
+            display: none;
+        }
 
-        @media (max-width: 1024px) { .main-content { grid-template-columns: 1fr; } }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
 
         @media print {
-            body { background: white; }
-            .navbar, .login-overlay, .input-section, .export-section, .keyboard-hint, .actions-col, .inventory-wrapper { display: none !important; }
-            .main-content { display: block; padding: 0; margin: 0; }
-            .card { border: none; box-shadow: none; padding: 0; margin: 0; }
-            .grid-2 { display: block; }
-            .input-field { display: none; } /* Hide input boxes */
-            .print-only { display: block; } /* Show plain text for print */
-            td:last-child, th:last-child { display: none; } /* Hide actions column */
+            body {
+                background: white;
+            }
+
+            .navbar,
+            .login-overlay,
+            .input-section,
+            .export-section,
+            .keyboard-hint,
+            .actions-col,
+            .inventory-wrapper {
+                display: none !important;
+            }
+
+            .main-content {
+                display: block;
+                padding: 0;
+                margin: 0;
+            }
+
+            .card {
+                border: none;
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .grid-2 {
+                display: block;
+            }
+
+            .input-field {
+                display: none;
+            }
+
+            /* Hide input boxes */
+            .print-only {
+                display: block;
+            }
+
+            /* Show plain text for print */
+            td:last-child,
+            th:last-child {
+                display: none;
+            }
+
+            /* Hide actions column */
         }
     </style>
 </head>
@@ -140,7 +380,7 @@
         <div class="brand">
             <i class="fa-solid fa-bolt"></i> Rudra Billing
         </div>
-        
+
         <div class="search-bar-nav">
             <input type="text" id="search-invoice-number" placeholder="Search Invoice (e.g. RI25-0001)">
             <button class="btn-outline" id="fetch-bill-btn"><i class="fa-solid fa-arrow-right"></i></button>
@@ -148,8 +388,10 @@
 
         <div class="flex">
             <button class="btn-outline" id="billing-page-btn"><i class="fa-solid fa-file-invoice"></i> Billing</button>
-            <button class="btn-outline" id="manage-inventory-btn"><i class="fa-solid fa-boxes-stacked"></i> Inventory</button>
-            <button class="btn-danger btn-icon" id="logout-btn" title="Logout"><i class="fa-solid fa-power-off"></i></button>
+            <button class="btn-outline" id="manage-inventory-btn"><i class="fa-solid fa-boxes-stacked"></i>
+                Inventory</button>
+            <button class="btn-danger btn-icon" id="logout-btn" title="Logout"><i
+                    class="fa-solid fa-power-off"></i></button>
         </div>
     </nav>
 
@@ -159,7 +401,7 @@
                 <span>Inventory Management</span>
                 <button class="btn-outline" onclick="showBillingPage()">Back to Billing</button>
             </div>
-            
+
             <div class="flex mb-4" style="background: #f8fafc; padding: 15px; border-radius: 8px;">
                 <input type="text" id="product-name-inv" placeholder="New Product Name" style="flex: 2;">
                 <input type="number" id="product-price-inv" placeholder="Price (₹)" style="flex: 1;">
@@ -182,7 +424,7 @@
     </div>
 
     <div class="main-content hidden" id="invoice-container">
-        
+
         <div class="content-col">
             <div class="card">
                 <div class="card-header">
@@ -219,13 +461,15 @@
             <div class="card">
                 <div class="card-header">
                     <span>Items</span>
-                    <span class="keyboard-hint input-section" style="font-size: 12px; font-weight: 400; color: var(--text-light); background: #f1f5f9; padding: 4px 8px; border-radius: 4px;">
+                    <span class="keyboard-hint input-section"
+                        style="font-size: 12px; font-weight: 400; color: var(--text-light); background: #f1f5f9; padding: 4px 8px; border-radius: 4px;">
                         Enter = Next | Shift+Enter = Discount
                     </span>
                 </div>
-                
+
                 <div class="flex input-section mb-4">
-                    <input type="text" id="product-name" style="flex: 3;" placeholder="Search Product..." list="product-list" autocomplete="off">
+                    <input type="text" id="product-name" style="flex: 3;" placeholder="Search Product..."
+                        list="product-list" autocomplete="off">
                     <datalist id="product-list"></datalist>
                     <input type="number" id="product-quantity" style="flex: 1;" placeholder="Qty" min="1" value="1">
                     <input type="number" id="product-price" style="flex: 1.5;" placeholder="Price" min="0">
@@ -253,21 +497,6 @@
         <div class="sidebar-col">
             <div class="card">
                 <div class="card-header">Payment Summary</div>
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span style="font-weight: 600;">₹<span id="subtotal">0.00</span></span>
-                </div>
-                <div class="summary-row discount-section input-section">
-                    <span>Discount</span>
-                    <div class="flex" style="width: 140px;">
-                        <input type="number" id="discount-amount" placeholder="₹" style="padding: 6px;" onchange="calculateTotal()">
-                        <input type="number" id="discount-percent" placeholder="%" style="padding: 6px;" onchange="applyPercentDiscount()">
-                    </div>
-                </div>
-                <div class="summary-row" style="justify-content: flex-end; color: var(--success); font-size: 13px;">
-                    - <span id="discount-display">0.00</span>
-                </div>
-                
                 <div class="summary-total">
                     <span>Total</span>
                     <span>₹<span id="grand-total">0.00</span></span>
@@ -277,160 +506,198 @@
                     <button class="btn-primary w-full" id="save-btn">
                         <i class="fa-solid fa-cloud-arrow-up"></i> Save Record
                     </button>
-                    
-                    <div class="grid-2">
-                        <button class="btn-outline w-full" id="print-btn">
-                            <i class="fa-solid fa-print"></i> Print
+                    ...
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span style="font-weight: 600;">₹<span id="subtotal">0.00</span></span>
+                    </div>
+                    <div class="summary-row discount-section input-section">
+                        <span>Discount</span>
+                        <div class="flex" style="width: 140px;">
+                            <input type="number" id="discount-amount" placeholder="₹" style="padding: 6px;"
+                                onchange="calculateTotal()">
+                            <input type="number" id="discount-percent" placeholder="%" style="padding: 6px;"
+                                onchange="applyPercentDiscount()">
+                        </div>
+                    </div>
+                    <div class="summary-row" style="justify-content: flex-end; color: var(--success); font-size: 13px;">
+                        - <span id="discount-display">0.00</span>
+                    </div>
+
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span>₹<span id="grand-total-bottom">0.00</span></span>
+                    </div>
+
+                    <!-- ✅ LIVE QR SECTION (Website QR) -->
+                    <div id="qr-section" style="display:none; text-align:center; margin-top:15px;">
+                        <img id="qr-image" style="width:150px; height:150px;" />
+                        <div style="font-size:12px; margin-top:5px;">
+                            <b>Scan to Pay</b><br />
+                            UPI: gpay-11265571011@okbizaxis
+                        </div>
+                    </div>
+
+                    <div class="flex-col export-section" style="margin-top: 1.5rem;">
+                        <button class="btn-primary w-full" id="save-btn">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Save Record
                         </button>
-                        <button class="btn-danger w-full" id="pdf-btn">
-                            <i class="fa-solid fa-file-pdf"></i> PDF
+
+                        <div class="grid-2">
+                            <button class="btn-outline w-full" id="print-btn">
+                                <i class="fa-solid fa-print"></i> Print
+                            </button>
+                            <button class="btn-danger w-full" id="pdf-btn">
+                                <i class="fa-solid fa-file-pdf"></i> PDF
+                            </button>
+                        </div>
+
+                        <div class="grid-2">
+                            <button class="btn-outline w-full" id="excel-btn">
+                                <i class="fa-solid fa-file-excel"></i> Excel
+                            </button>
+                            <button class="btn-outline w-full" id="doc-btn">
+                                <i class="fa-solid fa-file-word"></i> Doc
+                            </button>
+                        </div>
+
+                        <button class="btn-outline w-full" id="new-bill-btn"
+                            style="margin-top: 10px; border-style: dashed;">
+                            <i class="fa-solid fa-rotate-right"></i> New Bill
                         </button>
                     </div>
-                    
-                    <div class="grid-2">
-                        <button class="btn-outline w-full" id="excel-btn">
-                            <i class="fa-solid fa-file-excel"></i> Excel
-                        </button>
-                        <button class="btn-outline w-full" id="doc-btn">
-                            <i class="fa-solid fa-file-word"></i> Doc
-                        </button>
+
+                    <div style="margin-top: 20px; font-size: 12px; color: var(--text-light); text-align: center;">
+                        <p id="created-by"></p>
                     </div>
-                    
-                    <button class="btn-outline w-full" id="new-bill-btn" style="margin-top: 10px; border-style: dashed;">
-                        <i class="fa-solid fa-rotate-right"></i> New Bill
-                    </button>
-                </div>
-                
-                <div style="margin-top: 20px; font-size: 12px; color: var(--text-light); text-align: center;">
-                    <p id="created-by"></p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        // 🔥 REPLACE THIS WITH YOUR SCRIPT URL
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwIwkYtNw0cF4GvEb_WtasAtFglCTpMaM4V8Sfbzkw03Y62KJ4nbcV9jitYQnZ2jQ00cA/exec";
+        <script>
+            // 🔥 REPLACE THIS WITH YOUR SCRIPT URL
+            const scriptURL = "https://script.google.com/macros/s/AKfycbwIwkYtNw0cF4GvEb_WtasAtFglCTpMaM4V8Sfbzkw03Y62KJ4nbcV9jitYQnZ2jQ00cA/exec";
 
-        let productCount = 0;
-        let products = [];
-        let currentUser = null;
-        let inventory = [];
+            let productCount = 0;
+            let products = [];
+            let currentUser = null;
+            let inventory = [];
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            // Initialize Buttons (No onclicks in HTML)
-            document.getElementById('login-btn').addEventListener('click', handleLogin);
-            document.getElementById('fetch-bill-btn').addEventListener('click', fetchBillData);
-            
-            document.getElementById('billing-page-btn').addEventListener('click', showBillingPage);
-            document.getElementById('manage-inventory-btn').addEventListener('click', showInventoryPage);
-            document.getElementById('logout-btn').addEventListener('click', handleLogout);
-            document.getElementById('new-bill-btn').addEventListener('click', newBill);
-            
-            document.getElementById('add-product-btn').addEventListener('click', addProduct);
-            document.getElementById('add-product-inv-btn').addEventListener('click', handleAddInventoryProduct);
-            document.getElementById('product-name').addEventListener('input', handleProductSelection);
-            
-            // Export Listeners
-            document.getElementById('print-btn').addEventListener('click', printBill);
-            document.getElementById('save-btn').addEventListener('click', saveToSheet);
-            document.getElementById('pdf-btn').addEventListener('click', exportToPDF);
-            document.getElementById('excel-btn').addEventListener('click', exportToExcel);
-            document.getElementById('doc-btn').addEventListener('click', exportToDoc);
+            document.addEventListener('DOMContentLoaded', (event) => {
+                // Initialize Buttons (No onclicks in HTML)
+                document.getElementById('login-btn').addEventListener('click', handleLogin);
+                document.getElementById('fetch-bill-btn').addEventListener('click', fetchBillData);
 
-            document.addEventListener('keydown', handleKeydown);
-            document.getElementById('invoice-date').textContent = new Date().toLocaleDateString('en-IN');
-            
-            window.onbeforeunload = function() { sessionStorage.removeItem('rudraUser'); };
-            checkSession();
-        });
+                document.getElementById('billing-page-btn').addEventListener('click', showBillingPage);
+                document.getElementById('manage-inventory-btn').addEventListener('click', showInventoryPage);
+                document.getElementById('logout-btn').addEventListener('click', handleLogout);
+                document.getElementById('new-bill-btn').addEventListener('click', newBill);
 
-        // --- UI HELPERS ---
-        function checkSession() {
-            const loggedInUser = sessionStorage.getItem('rudraUser');
-            if (loggedInUser) { currentUser = loggedInUser; showApp(); } 
-            else { showLogin(); }
-        }
+                document.getElementById('add-product-btn').addEventListener('click', addProduct);
+                document.getElementById('add-product-inv-btn').addEventListener('click', handleAddInventoryProduct);
+                document.getElementById('product-name').addEventListener('input', handleProductSelection);
 
-        function showLogin() {
-            document.getElementById('login-container').classList.remove('hidden');
-            document.getElementById('navbar').classList.add('hidden');
-            document.getElementById('invoice-container').classList.add('hidden');
-            document.getElementById('inventory-container').classList.add('hidden');
-            document.getElementById('username').focus();
-        }
+                // Export Listeners
+                document.getElementById('print-btn').addEventListener('click', printBill);
+                document.getElementById('save-btn').addEventListener('click', saveToSheet);
+                document.getElementById('pdf-btn').addEventListener('click', exportToPDF);
+                document.getElementById('excel-btn').addEventListener('click', exportToExcel);
+                document.getElementById('doc-btn').addEventListener('click', exportToDoc);
 
-        function showApp() {
-            document.getElementById('login-container').classList.add('hidden');
-            document.getElementById('navbar').classList.remove('hidden');
-            fetchInventory(); 
-            showBillingPage();
-        }
-        
-        function showBillingPage() {
-            document.getElementById('invoice-container').classList.remove('hidden');
-            document.getElementById('inventory-container').classList.add('hidden');
-            fetchInvoiceNumber();
-            document.getElementById('customer-name').focus();
-        }
+                document.addEventListener('keydown', handleKeydown);
+                document.getElementById('invoice-date').textContent = new Date().toLocaleDateString('en-IN');
 
-        function showInventoryPage() {
-            document.getElementById('invoice-container').classList.add('hidden');
-            document.getElementById('inventory-container').classList.remove('hidden');
-            fetchInventory(); 
-            document.getElementById('product-name-inv').focus();
-        }
-        
-        function updatePrintableSpans() {
-            document.getElementById('print-customer-name').textContent = document.getElementById('customer-name').value || "N/A";
-            document.getElementById('print-customer-mobile').textContent = document.getElementById('customer-mobile').value || "N/A";
-            document.getElementById('print-invoice-num').textContent = document.getElementById('invoice-number').textContent;
-            document.getElementById('print-invoice-date').textContent = document.getElementById('invoice-date').textContent;
-        }
+                window.onbeforeunload = function () { sessionStorage.removeItem('rudraUser'); };
+                checkSession();
+            });
 
-        // --- CORE LOGIC ---
-        async function handleLogin() {
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-            const btn = document.getElementById('login-btn');
-            const err = document.getElementById('login-error');
+            // --- UI HELPERS ---
+            function checkSession() {
+                const loggedInUser = sessionStorage.getItem('rudraUser');
+                if (loggedInUser) { currentUser = loggedInUser; showApp(); }
+                else { showLogin(); }
+            }
 
-            if (!user || !pass) return;
-            btn.innerText = "Logging in..."; btn.disabled = true; err.style.display = 'none';
+            function showLogin() {
+                document.getElementById('login-container').classList.remove('hidden');
+                document.getElementById('navbar').classList.add('hidden');
+                document.getElementById('invoice-container').classList.add('hidden');
+                document.getElementById('inventory-container').classList.add('hidden');
+                document.getElementById('username').focus();
+            }
 
-            try {
-                const res = await fetch(scriptURL, { method: "POST", body: JSON.stringify({ action: "login", data: { user, pass } }) });
-                const result = await res.json();
-                if (result.status === "success") {
-                    sessionStorage.setItem('rudraUser', result.username);
-                    currentUser = result.username;
-                    showApp();
-                } else {
-                    err.innerText = result.message; err.style.display = 'block';
-                }
-            } catch (e) { err.innerText = "Network Error"; err.style.display = 'block'; }
-            btn.innerText = "Sign In"; btn.disabled = false;
-        }
+            function showApp() {
+                document.getElementById('login-container').classList.add('hidden');
+                document.getElementById('navbar').classList.remove('hidden');
+                fetchInventory();
+                showBillingPage();
+            }
 
-        function handleLogout() { sessionStorage.clear(); location.reload(); }
+            function showBillingPage() {
+                document.getElementById('invoice-container').classList.remove('hidden');
+                document.getElementById('inventory-container').classList.add('hidden');
+                fetchInvoiceNumber();
+                document.getElementById('customer-name').focus();
+            }
 
-        async function fetchInventory() {
-            try {
-                const res = await fetch(scriptURL + '?action=getInventory');
-                const result = await res.json();
-                if (result.status === "success") {
-                    inventory = result.data;
-                    document.getElementById('product-list').innerHTML = '';
-                    populateInventoryTable();
-                }
-            } catch(e) {}
-        }
+            function showInventoryPage() {
+                document.getElementById('invoice-container').classList.add('hidden');
+                document.getElementById('inventory-container').classList.remove('hidden');
+                fetchInventory();
+                document.getElementById('product-name-inv').focus();
+            }
 
-        function populateInventoryTable() {
-            const tbody = document.getElementById('inventory-table-body');
-            tbody.innerHTML = '';
-            inventory.forEach(item => {
-                tbody.innerHTML += `
+            function updatePrintableSpans() {
+                document.getElementById('print-customer-name').textContent = document.getElementById('customer-name').value || "N/A";
+                document.getElementById('print-customer-mobile').textContent = document.getElementById('customer-mobile').value || "N/A";
+                document.getElementById('print-invoice-num').textContent = document.getElementById('invoice-number').textContent;
+                document.getElementById('print-invoice-date').textContent = document.getElementById('invoice-date').textContent;
+            }
+
+            // --- CORE LOGIC ---
+            async function handleLogin() {
+                const user = document.getElementById('username').value;
+                const pass = document.getElementById('password').value;
+                const btn = document.getElementById('login-btn');
+                const err = document.getElementById('login-error');
+
+                if (!user || !pass) return;
+                btn.innerText = "Logging in..."; btn.disabled = true; err.style.display = 'none';
+
+                try {
+                    const res = await fetch(scriptURL, { method: "POST", body: JSON.stringify({ action: "login", data: { user, pass } }) });
+                    const result = await res.json();
+                    if (result.status === "success") {
+                        sessionStorage.setItem('rudraUser', result.username);
+                        currentUser = result.username;
+                        showApp();
+                    } else {
+                        err.innerText = result.message; err.style.display = 'block';
+                    }
+                } catch (e) { err.innerText = "Network Error"; err.style.display = 'block'; }
+                btn.innerText = "Sign In"; btn.disabled = false;
+            }
+
+            function handleLogout() { sessionStorage.clear(); location.reload(); }
+
+            async function fetchInventory() {
+                try {
+                    const res = await fetch(scriptURL + '?action=getInventory');
+                    const result = await res.json();
+                    if (result.status === "success") {
+                        inventory = result.data;
+                        document.getElementById('product-list').innerHTML = '';
+                        populateInventoryTable();
+                    }
+                } catch (e) { }
+            }
+
+            function populateInventoryTable() {
+                const tbody = document.getElementById('inventory-table-body');
+                tbody.innerHTML = '';
+                inventory.forEach(item => {
+                    tbody.innerHTML += `
                 <tr>
                     <td>${item.name}</td>
                     <td>₹${item.price}</td>
@@ -440,95 +707,95 @@
                         </button>
                     </td>
                 </tr>`;
-            });
-        }
-
-        function handleProductSelection(e) {
-            const val = e.target.value;
-            const list = document.getElementById('product-list');
-            if(val.length > 0) {
-                list.innerHTML = '';
-                const matches = inventory.filter(p => p.name.toLowerCase().includes(val.toLowerCase()));
-                matches.forEach(p => {
-                    const option = document.createElement('option'); option.value = p.name; list.appendChild(option);
                 });
             }
-            const item = inventory.find(p => p.name === val);
-            if (item) {
-                document.getElementById('product-price').value = item.price;
-                const qty = document.getElementById('product-quantity');
-                qty.value = 1; qty.focus(); qty.select();
+
+            function handleProductSelection(e) {
+                const val = e.target.value;
+                const list = document.getElementById('product-list');
+                if (val.length > 0) {
+                    list.innerHTML = '';
+                    const matches = inventory.filter(p => p.name.toLowerCase().includes(val.toLowerCase()));
+                    matches.forEach(p => {
+                        const option = document.createElement('option'); option.value = p.name; list.appendChild(option);
+                    });
+                }
+                const item = inventory.find(p => p.name === val);
+                if (item) {
+                    document.getElementById('product-price').value = item.price;
+                    const qty = document.getElementById('product-quantity');
+                    qty.value = 1; qty.focus(); qty.select();
+                }
             }
-        }
 
-        async function handleAddInventoryProduct(e) {
-            const name = document.getElementById('product-name-inv').value;
-            const price = document.getElementById('product-price-inv').value;
-            if(!name || !price) return alert("Fill details");
-            
-            const btn = document.getElementById('add-product-inv-btn');
-            const originalText = btn.innerHTML;
-            btn.innerText = "..."; btn.disabled = true;
-            
-            await fetch(scriptURL, { method: "POST", body: JSON.stringify({ action: "manageInventory", data: { subAction: "add", name, price } })});
-            
-            alert("Added!"); 
-            btn.innerHTML = originalText; btn.disabled = false;
-            document.getElementById('product-name-inv').value = "";
-            document.getElementById('product-price-inv').value = "";
-            document.getElementById('product-name-inv').focus();
-            fetchInventory(); 
-        }
+            async function handleAddInventoryProduct(e) {
+                const name = document.getElementById('product-name-inv').value;
+                const price = document.getElementById('product-price-inv').value;
+                if (!name || !price) return alert("Fill details");
 
-        async function deleteInvItem(name) {
-            if(!confirm("Delete " + name + "?")) return;
-            await fetch(scriptURL, { method: "POST", body: JSON.stringify({ action: "manageInventory", data: { subAction: "delete", name } })});
-            fetchInventory();
-        }
+                const btn = document.getElementById('add-product-inv-btn');
+                const originalText = btn.innerHTML;
+                btn.innerText = "..."; btn.disabled = true;
 
-        async function fetchInvoiceNumber() {
-            try {
-                const res = await fetch(scriptURL);
-                const data = await res.json();
-                document.getElementById('invoice-number').textContent = data.invoiceNumber || "N/A";
-                document.getElementById('created-by').textContent = '';
-            } catch (e) {}
-        }
+                await fetch(scriptURL, { method: "POST", body: JSON.stringify({ action: "manageInventory", data: { subAction: "add", name, price } }) });
 
-        function newBill() { location.reload(); }
-        
-        async function fetchBillData() {
-            const inv = document.getElementById('search-invoice-number').value.trim();
-            if (!inv) return alert("Enter Invoice No");
-            const btn = document.getElementById('fetch-bill-btn');
-            btn.disabled = true;
-            try {
-                const res = await fetch(scriptURL + '?invoice=' + encodeURIComponent(inv));
-                const result = await res.json();
-                if (result.status === "success") { populateForm(result.data); } 
-                else { alert(result.message); }
-            } catch (e) { alert("Error fetching bill"); }
-            btn.disabled = false;
-        }
+                alert("Added!");
+                btn.innerHTML = originalText; btn.disabled = false;
+                document.getElementById('product-name-inv').value = "";
+                document.getElementById('product-price-inv').value = "";
+                document.getElementById('product-name-inv').focus();
+                fetchInventory();
+            }
 
-        function populateForm(data) {
-            products = []; productCount = 0;
-            document.getElementById('products-body').innerHTML = '';
-            document.getElementById('invoice-number').textContent = data.invoiceNo;
-            document.getElementById('invoice-date').textContent = data.date;
-            document.getElementById('customer-name').value = data.customerName;
-            document.getElementById('customer-mobile').value = data.customerMobile;
-            document.getElementById('discount-amount').value = data.discount;
-            document.getElementById('created-by').textContent = 'Bill created by: ' + (data.createdBy || 'N/A');
+            async function deleteInvItem(name) {
+                if (!confirm("Delete " + name + "?")) return;
+                await fetch(scriptURL, { method: "POST", body: JSON.stringify({ action: "manageInventory", data: { subAction: "delete", name } }) });
+                fetchInventory();
+            }
 
-            try {
-                const items = JSON.parse(data.items);
-                items.forEach((p, i) => {
-                    products.push(p); productCount++;
-                    const row = document.getElementById('products-body').insertRow();
-                    row.id = 'row-' + p.id;
-                    row.innerHTML = `
-                        <td>${i+1}</td>
+            async function fetchInvoiceNumber() {
+                try {
+                    const res = await fetch(scriptURL);
+                    const data = await res.json();
+                    document.getElementById('invoice-number').textContent = data.invoiceNumber || "N/A";
+                    document.getElementById('created-by').textContent = '';
+                } catch (e) { }
+            }
+
+            function newBill() { location.reload(); }
+
+            async function fetchBillData() {
+                const inv = document.getElementById('search-invoice-number').value.trim();
+                if (!inv) return alert("Enter Invoice No");
+                const btn = document.getElementById('fetch-bill-btn');
+                btn.disabled = true;
+                try {
+                    const res = await fetch(scriptURL + '?invoice=' + encodeURIComponent(inv));
+                    const result = await res.json();
+                    if (result.status === "success") { populateForm(result.data); }
+                    else { alert(result.message); }
+                } catch (e) { alert("Error fetching bill"); }
+                btn.disabled = false;
+            }
+
+            function populateForm(data) {
+                products = []; productCount = 0;
+                document.getElementById('products-body').innerHTML = '';
+                document.getElementById('invoice-number').textContent = data.invoiceNo;
+                document.getElementById('invoice-date').textContent = data.date;
+                document.getElementById('customer-name').value = data.customerName;
+                document.getElementById('customer-mobile').value = data.customerMobile;
+                document.getElementById('discount-amount').value = data.discount;
+                document.getElementById('created-by').textContent = 'Bill created by: ' + (data.createdBy || 'N/A');
+
+                try {
+                    const items = JSON.parse(data.items);
+                    items.forEach((p, i) => {
+                        products.push(p); productCount++;
+                        const row = document.getElementById('products-body').insertRow();
+                        row.id = 'row-' + p.id;
+                        row.innerHTML = `
+                        <td>${i + 1}</td>
                         <td><div style="font-weight:500;">${p.name}</div></td>
                         <td>${p.qty}</td>
                         <td>₹${p.price.toFixed(2)}</td>
@@ -537,40 +804,40 @@
                             <button class="btn-outline btn-icon edit-btn" style="background:#fffbeb; color:#d97706;" onclick="editProduct(${p.id})"><i class="fa-solid fa-pen"></i></button> 
                             <button class="btn-outline btn-icon delete-btn" style="color:var(--danger);" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i></button>
                         </td>`;
-                });
-                productCount = products.length;
-            } catch(e) {}
-            calculateTotal();
-        }
-        
-        function handleKeydown(e) {
-            const target = e.target;
-            if(target.id === 'password' && e.key === 'Enter') handleLogin();
-            if(target.id === 'product-name-inv' && e.key === 'Enter') document.getElementById('product-price-inv').focus();
-            if(target.id === 'product-price-inv' && e.key === 'Enter') handleAddInventoryProduct(e);
-            if(target.id === 'product-quantity' && e.key === 'Enter') { e.preventDefault(); document.getElementById('product-price').focus(); }
-            if(target.id === 'product-price' && e.key === 'Enter') { e.preventDefault(); addProduct(); }
-            
-            if(target.classList.contains('input-field') && e.key === 'Enter') {
-                e.preventDefault();
-                if(target.id === 'customer-name') document.getElementById('customer-mobile').focus();
-                else document.getElementById('product-name').focus();
+                    });
+                    productCount = products.length;
+                } catch (e) { }
+                calculateTotal();
             }
-        }
 
-        function addProduct() {
-            const name = document.getElementById('product-name').value;
-            const quantity = parseFloat(document.getElementById('product-quantity').value);
-            const price = parseFloat(document.getElementById('product-price').value);
-            if (!name || isNaN(quantity) || isNaN(price)) return alert("Fill all fields");
+            function handleKeydown(e) {
+                const target = e.target;
+                if (target.id === 'password' && e.key === 'Enter') handleLogin();
+                if (target.id === 'product-name-inv' && e.key === 'Enter') document.getElementById('product-price-inv').focus();
+                if (target.id === 'product-price-inv' && e.key === 'Enter') handleAddInventoryProduct(e);
+                if (target.id === 'product-quantity' && e.key === 'Enter') { e.preventDefault(); document.getElementById('product-price').focus(); }
+                if (target.id === 'product-price' && e.key === 'Enter') { e.preventDefault(); addProduct(); }
 
-            productCount++;
-            const total = quantity * price;
-            products.push({ id: productCount, name, qty: quantity, price, total });
-            
-            const row = document.getElementById('products-body').insertRow();
-            row.id = 'row-' + productCount;
-            row.innerHTML = `
+                if (target.classList.contains('input-field') && e.key === 'Enter') {
+                    e.preventDefault();
+                    if (target.id === 'customer-name') document.getElementById('customer-mobile').focus();
+                    else document.getElementById('product-name').focus();
+                }
+            }
+
+            function addProduct() {
+                const name = document.getElementById('product-name').value;
+                const quantity = parseFloat(document.getElementById('product-quantity').value);
+                const price = parseFloat(document.getElementById('product-price').value);
+                if (!name || isNaN(quantity) || isNaN(price)) return alert("Fill all fields");
+
+                productCount++;
+                const total = quantity * price;
+                products.push({ id: productCount, name, qty: quantity, price, total });
+
+                const row = document.getElementById('products-body').insertRow();
+                row.id = 'row-' + productCount;
+                row.innerHTML = `
                 <td>${document.getElementById('products-body').rows.length}</td>
                 <td><div style="font-weight:500;">${name}</div></td>
                 <td>${quantity}</td>
@@ -581,301 +848,338 @@
                     <button class="btn-outline btn-icon" style="color:var(--danger);" onclick="deleteProduct(${productCount})"><i class="fa-solid fa-trash"></i></button>
                 </td>`;
 
-            document.getElementById('product-name').value = '';
-            document.getElementById('product-quantity').value = '1';
-            document.getElementById('product-price').value = '';
-            document.getElementById('product-name').focus();
-            calculateTotal();
-        }
-
-        function editProduct(id) {
-            const p = products.find(x => x.id === id);
-            if(p) {
-                document.getElementById('product-name').value = p.name;
-                document.getElementById('product-quantity').value = p.qty;
-                document.getElementById('product-price').value = p.price;
+                document.getElementById('product-name').value = '';
+                document.getElementById('product-quantity').value = '1';
+                document.getElementById('product-price').value = '';
                 document.getElementById('product-name').focus();
-                deleteProduct(id);
-            }
-        }
-
-        function deleteProduct(id) {
-            const row = document.getElementById('row-' + id);
-            if (row) row.remove();
-            products = products.filter(p => p.id !== id);
-            const rows = document.getElementById('products-body').rows;
-            for (let i = 0; i < rows.length; i++) rows[i].cells[0].textContent = i + 1;
-            calculateTotal();
-        }
-
-        function calculateTotal() {
-            let sub = products.reduce((acc, p) => acc + p.total, 0);
-            let disc = parseFloat(document.getElementById('discount-amount').value) || 0;
-            let per = parseFloat(document.getElementById('discount-percent').value) || 0;
-            if (per > 0) { disc = (sub * per) / 100; document.getElementById('discount-amount').value = disc.toFixed(2); }
-            document.getElementById('subtotal').innerText = sub.toFixed(2);
-            document.getElementById('discount-display').innerText = disc.toFixed(2);
-            document.getElementById('grand-total').innerText = (sub - disc).toFixed(2);
-        }
-        function applyPercentDiscount() { calculateTotal(); }
-
-        async function saveToSheet(e) {
-            if(products.length===0) return alert("Empty bill");
-            const btn = document.getElementById('save-btn');
-            const orig = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
-            
-            const data = {
-                invoiceNo: document.getElementById('invoice-number').textContent,
-                date: document.getElementById('invoice-date').textContent,
-                customerName: document.getElementById('customer-name').value || "N/A",
-                customerMobile: document.getElementById('customer-mobile').value || "N/A",
-                items: products,
-                subtotal: document.getElementById('subtotal').innerText,
-                discount: document.getElementById('discount-amount').value || "0",
-                grandTotal: document.getElementById('grand-total').innerText,
-                username: currentUser
-            };
-            try {
-                await fetch(scriptURL, { method: "POST", body: JSON.stringify({ action: "saveBill", data: data }) });
-                alert("✅ Saved!");
-            } catch(e) { alert("Error saving"); }
-            btn.innerHTML = orig; btn.disabled = false;
-        }
-
-        function printBill() {
-            updatePrintableSpans();
-            window.print();
-        }
-
-        // --- EXACT ORIGINAL EXPORT FUNCTIONS ---
-        async function exportToPDF() { 
-            updatePrintableSpans(); 
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            const invoiceNum = String(document.getElementById('invoice-number').textContent);
-
-            const rawDate = String(document.getElementById('invoice-date').textContent);
-            
-            // --- DATE FIX START ---
-            let invoiceDate;
-            const dateObj = new Date(rawDate);
-
-            // Check if the computer understands the date
-            if (isNaN(dateObj.getTime())) {
-                // If computer says "Invalid" (NaN), it means it's already formatted (28/11/2025)
-                // So we just use the text exactly as it is.
-                invoiceDate = rawDate;
-            } else {
-                // If computer understands it (Fetched Bill), we format it to Indian style.
-                invoiceDate = dateObj.toLocaleDateString('en-IN');
-            }
-            // --- DATE FIX END ---
-            
-            const customerName = String(document.getElementById('customer-name').value || 'N/A');
-            const customerMobile = String(document.getElementById('customer-mobile').value || 'N/A');
-
-            const subtotal = String(document.getElementById('subtotal').textContent);
-            const discount = String(document.getElementById('discount-display').textContent);
-            const grandTotal = String(document.getElementById('grand-total').textContent);
-            const discountValue = parseFloat(discount) || 0;
-
-            // --- QR CODE LOGIC ---
-            const upiID = "tarunmhanta1@okicici";
-            const payeeName = "Rudra Electronics";
-            const cleanTotal = grandTotal.replace(/[^\d.]/g, '');
-            const upiString = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${cleanTotal}&tn=Invoice ${invoiceNum}`;
-            const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(upiString)}&size=150`;
-            
-            const getImageData = (url) => {
-                return new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.crossOrigin = "Anonymous";
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = img.width;
-                        canvas.height = img.height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0);
-                        resolve(canvas.toDataURL('image/png'));
-                    };
-                    img.onerror = (e) => { 
-                         console.warn("QR Load failed", e);
-                         resolve(null);
-                    };
-                    img.src = url;
-                });
-            };
-            
-            let qrDataUrl = null;
-            try { qrDataUrl = await getImageData(qrUrl); } catch (e) {}
-
-            const tableData = products.map((product, index) => [
-                String(index + 1),
-                String(product.name),
-                String(product.qty),
-                String('Rs.' + product.price.toFixed(2)),
-                String('Rs.' + product.total.toFixed(2))
-            ]);
-
-            const footerData = [
-                ['', '', '', 'Subtotal:', String('Rs.' + subtotal)]
-            ];
-
-            if (discountValue > 0) {
-                footerData.push(['', '', '', 'Discount:', String('Rs.' + discount)]);
-            }
-            footerData.push(['', '', '', 'Grand Total:', String('Rs.' + grandTotal)]);
-
-            doc.autoTable({
-                startY: 70,
-                head: [['S.No', 'Product Name', 'Quantity', 'Price', 'Total']],
-                body: tableData,
-                foot: footerData,
-                theme: 'grid',
-                showHead: 'everyPage',
-                showFoot: 'lastPage',
-                styles: { fontSize: 10, cellPadding: 3, font: 'helvetica' },
-                headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold', lineWidth: 0.5, lineColor: [0, 0, 0] },
-                bodyStyles: { textColor: [0, 0, 0], lineWidth: 0.3, lineColor: [0, 0, 0] },
-                footStyles: { fillColor: [245, 245, 245], textColor: [0, 0, 0], fontStyle: 'bold', lineWidth: 0.5, lineColor: [0, 0, 0], halign: 'right' },
-                columnStyles: { 4: { halign: 'right' } },
-                didDrawPage: function (data) {
-                    doc.setFontSize(20);
-                    doc.setFont(undefined, 'bold');
-                    doc.text('RUDRA ELECTRONICS AND ACCESSORIES', 105, 15, { align: 'center' });
-                    doc.setFontSize(10);
-                    doc.setFont(undefined, 'normal');
-                    doc.text('Khadi Machine, Kumbhari, Solapur, Pin:- 413006', 105, 23, { align: 'center' }); 
-                    doc.setFontSize(9);
-                    doc.text('Tarun Mhanta: +91 9021640473  |  Pravin Fulpati: +91 7083377344', 105, 30, { align: 'center' });
-                    doc.text('Email: info.rudra.sur@gmail.com', 105, 35, { align: 'center' });
-                    doc.line(15, 40, 195, 40);
-                    doc.setFontSize(11);
-                    doc.setFont(undefined, 'bold');
-                    doc.text('Invoice No: ' + invoiceNum, 15, 50);
-                    doc.text('Date: ' + invoiceDate, 15, 57); 
-                    
-                    function splitTextToSize(text, maxLength) {
-                        if (!text || text.length <= maxLength) return [text || ''];
-                        let result = [];
-                        let words = text.split(' ');
-                        let line = '';
-                        for (let word of words) {
-                            if ((line + ' ' + word).trim().length > maxLength) {
-                                result.push(line.trim());
-                                line = word;
-                            } else {
-                                line += ' ' + word;
-                            }
-                        }
-                        if (line) result.push(line.trim());
-                        return result;
-                    }
-                    let nameLines = splitTextToSize('Customer Name: ' + customerName, 35);
-                    doc.text(nameLines[0], 120, 50);
-                    if (nameLines[1]) doc.text(nameLines[1], 120, 55);
-                    doc.text('Mobile: ' + customerMobile, 120, 57 + (nameLines.length > 1 ? 5 : 0));
-                    doc.line(15, 63, 195, 63);
-
-                    const pageCount = doc.internal.getNumberOfPages();
-                    doc.setFontSize(9);
-                    doc.setFont(undefined, 'normal');
-                    doc.text('Page ' + String(data.pageNumber) + ' of ' + String(pageCount), 195, 285, { align: 'right' });
-                },
-                margin: { top: 70 }
-            });
-            
-            let finalY = doc.lastAutoTable.finalY + 15;
-            
-            if (finalY + 50 > doc.internal.pageSize.height) {
-                doc.addPage();
-                finalY = 20; 
+                calculateTotal();
             }
 
-            if (qrDataUrl) {
-                const pageWidth = doc.internal.pageSize.width;
-                const qrSize = 35;
-                const qrX = (pageWidth - qrSize) / 2;
-
-                doc.addImage(qrDataUrl, 'PNG', qrX, finalY, qrSize, qrSize);
-
-                doc.setFontSize(9);
-                doc.setFont(undefined, 'bold');
-                doc.text("Scan to Pay", pageWidth / 2, finalY + 40, { align: 'center' });
-                doc.setFont(undefined, 'normal');
-                doc.text("UPI: " + upiID, pageWidth / 2, finalY + 45, { align: 'center' });
-                
-                finalY += 50;
+            function editProduct(id) {
+                const p = products.find(x => x.id === id);
+                if (p) {
+                    document.getElementById('product-name').value = p.name;
+                    document.getElementById('product-quantity').value = p.qty;
+                    document.getElementById('product-price').value = p.price;
+                    document.getElementById('product-name').focus();
+                    deleteProduct(id);
+                }
             }
 
-            doc.setFont(undefined, 'bold');
-            doc.setFontSize(11);
-            doc.text('Thank you for your business!', 105, finalY + 5, { align: 'center' });
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(9);
-            doc.text('For any queries, please contact us at the numbers above.', 105, finalY + 12, { align: 'center' });
-            
-            doc.save('Invoice_' + invoiceNum + '.pdf');
-        }
+            function deleteProduct(id) {
+                const row = document.getElementById('row-' + id);
+                if (row) row.remove();
+                products = products.filter(p => p.id !== id);
+                const rows = document.getElementById('products-body').rows;
+                for (let i = 0; i < rows.length; i++) rows[i].cells[0].textContent = i + 1;
+                calculateTotal();
+            }
 
-        function exportToExcel() {
-            const invoiceNum = document.getElementById('invoice-number').textContent;
-            const customerName = document.getElementById('customer-name').value || 'N/A';
-            const customerMobile = document.getElementById('customer-mobile').value || 'N/A';
-            const date = document.getElementById('invoice-date').textContent;
-            const excelData = [
-                ['RUDRA ELECTRONICS AND ACCESSORIES'],
-                ['Khadi Machine, Kumbhari, Solapur, Pin:- 413006'],
-                ['Tarun Mhanta: +91 9021640473  |  Pravin Fulpati: +91 7083377344'],
-                ['Email: info.rudra.sur@gmail.com'],
-                [''],
-                ['Invoice Number:', invoiceNum, '', 'Date:', date],
-                ['Customer Name:', customerName, '', 'Mobile:', customerMobile],
-                [''],
-                ['S.No', 'Product Name', 'Quantity', 'Price (Rs.)', 'Total (Rs.)']
-            ];
-            products.forEach((product, index) => {
-                excelData.push([
-                    index + 1,
-                    product.name,
-                    product.qty,
-                    product.price.toFixed(2),
-                    product.total.toFixed(2)
+            function calculateTotal() {
+                let sub = products.reduce((acc, p) => acc + p.total, 0);
+                let disc = parseFloat(document.getElementById('discount-amount').value) || 0;
+                let per = parseFloat(document.getElementById('discount-percent').value) || 0;
+                if (per > 0) { disc = (sub * per) / 100; document.getElementById('discount-amount').value = disc.toFixed(2); }
+                document.getElementById('subtotal').innerText = sub.toFixed(2);
+                document.getElementById('discount-display').innerText = disc.toFixed(2);
+                const finalAmount = (sub - disc).toFixed(2);
+
+                document.getElementById('grand-total').innerText = finalAmount;        // top total
+                document.getElementById('grand-total-bottom').innerText = finalAmount; // ✅ bottom total
+
+                updateLiveQR(finalAmount);
+
+
+            }
+            function updateLiveQR() {
+                const grandTotalText = document.getElementById('grand-total').innerText;
+
+                // Remove anything except numbers and dot
+                const cleanTotal = parseFloat(grandTotalText.replace(/[^\d.]/g, ''));
+
+                // If total is 0 or invalid → hide QR
+                if (!cleanTotal || cleanTotal <= 0) {
+                    document.getElementById('qr-section').style.display = 'none';
+                    return;
+                }
+
+                const invoiceNum = document.getElementById('invoice-number').textContent;
+
+                const upiID = "gpay-11265571011@okbizaxis";
+                const payeeName = "Rudra Electronics And Accessories";
+
+                const upiString =
+                    `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${cleanTotal}&tn=Invoice ${invoiceNum}`;
+
+                // Same QR provider you used in PDF (QuickChart)
+                const qrUrl =
+                    `https://quickchart.io/qr?size=180&text=${encodeURIComponent(upiString)}`;
+
+                const img = document.getElementById("qr-image");
+                img.src = qrUrl;
+
+                document.getElementById("qr-section").style.display = "block";
+            }
+
+            function applyPercentDiscount() { calculateTotal(); }
+
+            async function saveToSheet(e) {
+                if (products.length === 0) return alert("Empty bill");
+                const btn = document.getElementById('save-btn');
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+
+                const data = {
+                    invoiceNo: document.getElementById('invoice-number').textContent,
+                    date: document.getElementById('invoice-date').textContent,
+                    customerName: document.getElementById('customer-name').value || "N/A",
+                    customerMobile: document.getElementById('customer-mobile').value || "N/A",
+                    items: products,
+                    subtotal: document.getElementById('subtotal').innerText,
+                    discount: document.getElementById('discount-amount').value || "0",
+                    grandTotal: document.getElementById('grand-total').innerText,
+                    username: currentUser
+                };
+                try {
+                    await fetch(scriptURL, { method: "POST", body: JSON.stringify({ action: "saveBill", data: data }) });
+                    alert("✅ Saved!");
+                } catch (e) { alert("Error saving"); }
+                btn.innerHTML = orig; btn.disabled = false;
+            }
+
+            function printBill() {
+                updatePrintableSpans();
+                window.print();
+            }
+
+            // --- EXACT ORIGINAL EXPORT FUNCTIONS ---
+            async function exportToPDF() {
+                updatePrintableSpans();
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const invoiceNum = String(document.getElementById('invoice-number').textContent);
+
+                const rawDate = String(document.getElementById('invoice-date').textContent);
+
+                // --- DATE FIX START ---
+                let invoiceDate;
+                const dateObj = new Date(rawDate);
+
+                // Check if the computer understands the date
+                if (isNaN(dateObj.getTime())) {
+                    // If computer says "Invalid" (NaN), it means it's already formatted (28/11/2025)
+                    // So we just use the text exactly as it is.
+                    invoiceDate = rawDate;
+                } else {
+                    // If computer understands it (Fetched Bill), we format it to Indian style.
+                    invoiceDate = dateObj.toLocaleDateString('en-IN');
+                }
+                // --- DATE FIX END ---
+
+                const customerName = String(document.getElementById('customer-name').value || 'N/A');
+                const customerMobile = String(document.getElementById('customer-mobile').value || 'N/A');
+
+                const subtotal = String(document.getElementById('subtotal').textContent);
+                const discount = String(document.getElementById('discount-display').textContent);
+                const grandTotal = String(document.getElementById('grand-total').textContent);
+                const discountValue = parseFloat(discount) || 0;
+
+                // --- QR CODE LOGIC ---
+                const upiID = "gpay-11265571011@okbizaxis";
+                const payeeName = "Rudra Electronics And Accessories";
+                const cleanTotal = grandTotal.replace(/[^\d.]/g, '');
+                const upiString = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${cleanTotal}&tn=Invoice ${invoiceNum}`;
+                const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(upiString)}&size=150`;
+
+                const getImageData = (url) => {
+                    return new Promise((resolve, reject) => {
+                        const img = new Image();
+                        img.crossOrigin = "Anonymous";
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0);
+                            resolve(canvas.toDataURL('image/png'));
+                        };
+                        img.onerror = (e) => {
+                            console.warn("QR Load failed", e);
+                            resolve(null);
+                        };
+                        img.src = url;
+                    });
+                };
+
+                let qrDataUrl = null;
+                try { qrDataUrl = await getImageData(qrUrl); } catch (e) { }
+
+                const tableData = products.map((product, index) => [
+                    String(index + 1),
+                    String(product.name),
+                    String(product.qty),
+                    String('Rs.' + product.price.toFixed(2)),
+                    String('Rs.' + product.total.toFixed(2))
                 ]);
-            });
 
-            excelData.push([]);
-            excelData.push(['', '', '', 'Subtotal:', document.getElementById('subtotal').textContent]);
-            const discountValue = parseFloat(document.getElementById('discount-display').textContent) || 0;
-            if (discountValue > 0) {
-                 excelData.push(['', '', '', 'Discount:', document.getElementById('discount-display').textContent]);
+                const footerData = [
+                    ['', '', '', 'Subtotal:', String('Rs.' + subtotal)]
+                ];
+
+                if (discountValue > 0) {
+                    footerData.push(['', '', '', 'Discount:', String('Rs.' + discount)]);
+                }
+                footerData.push(['', '', '', 'Grand Total:', String('Rs.' + grandTotal)]);
+
+                doc.autoTable({
+                    startY: 70,
+                    head: [['S.No', 'Product Name', 'Quantity', 'Price', 'Total']],
+                    body: tableData,
+                    foot: footerData,
+                    theme: 'grid',
+                    showHead: 'everyPage',
+                    showFoot: 'lastPage',
+                    styles: { fontSize: 10, cellPadding: 3, font: 'helvetica' },
+                    headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold', lineWidth: 0.5, lineColor: [0, 0, 0] },
+                    bodyStyles: { textColor: [0, 0, 0], lineWidth: 0.3, lineColor: [0, 0, 0] },
+                    footStyles: { fillColor: [245, 245, 245], textColor: [0, 0, 0], fontStyle: 'bold', lineWidth: 0.5, lineColor: [0, 0, 0], halign: 'right' },
+                    columnStyles: { 4: { halign: 'right' } },
+                    didDrawPage: function (data) {
+                        doc.setFontSize(20);
+                        doc.setFont(undefined, 'bold');
+                        doc.text('RUDRA ELECTRONICS AND ACCESSORIES', 105, 15, { align: 'center' });
+                        doc.setFontSize(10);
+                        doc.setFont(undefined, 'normal');
+                        doc.text('Khadi Machine, Kumbhari, Solapur, Pin:- 413006', 105, 23, { align: 'center' });
+                        doc.setFontSize(9);
+                        doc.text('Tarun Mhanta: +91 9021640473  |  Pravin Fulpati: +91 7083377344', 105, 30, { align: 'center' });
+                        doc.text('Email: info.rudra.sur@gmail.com', 105, 35, { align: 'center' });
+                        doc.line(15, 40, 195, 40);
+                        doc.setFontSize(11);
+                        doc.setFont(undefined, 'bold');
+                        doc.text('Invoice No: ' + invoiceNum, 15, 50);
+                        doc.text('Date: ' + invoiceDate, 15, 57);
+
+                        function splitTextToSize(text, maxLength) {
+                            if (!text || text.length <= maxLength) return [text || ''];
+                            let result = [];
+                            let words = text.split(' ');
+                            let line = '';
+                            for (let word of words) {
+                                if ((line + ' ' + word).trim().length > maxLength) {
+                                    result.push(line.trim());
+                                    line = word;
+                                } else {
+                                    line += ' ' + word;
+                                }
+                            }
+                            if (line) result.push(line.trim());
+                            return result;
+                        }
+                        let nameLines = splitTextToSize('Customer Name: ' + customerName, 35);
+                        doc.text(nameLines[0], 120, 50);
+                        if (nameLines[1]) doc.text(nameLines[1], 120, 55);
+                        doc.text('Mobile: ' + customerMobile, 120, 57 + (nameLines.length > 1 ? 5 : 0));
+                        doc.line(15, 63, 195, 63);
+
+                        const pageCount = doc.internal.getNumberOfPages();
+                        doc.setFontSize(9);
+                        doc.setFont(undefined, 'normal');
+                        doc.text('Page ' + String(data.pageNumber) + ' of ' + String(pageCount), 195, 285, { align: 'right' });
+                    },
+                    margin: { top: 70 }
+                });
+
+                let finalY = doc.lastAutoTable.finalY + 15;
+
+                if (finalY + 50 > doc.internal.pageSize.height) {
+                    doc.addPage();
+                    finalY = 20;
+                }
+
+                if (qrDataUrl) {
+                    const pageWidth = doc.internal.pageSize.width;
+                    const qrSize = 35;
+                    const qrX = (pageWidth - qrSize) / 2;
+
+                    doc.addImage(qrDataUrl, 'PNG', qrX, finalY, qrSize, qrSize);
+
+                    doc.setFontSize(9);
+                    doc.setFont(undefined, 'bold');
+                    doc.text("Scan to Pay", pageWidth / 2, finalY + 40, { align: 'center' });
+                    doc.setFont(undefined, 'normal');
+                    doc.text("UPI: " + upiID, pageWidth / 2, finalY + 45, { align: 'center' });
+
+                    finalY += 50;
+                }
+
+                doc.setFont(undefined, 'bold');
+                doc.setFontSize(11);
+                doc.text('Thank you for your business!', 105, finalY + 5, { align: 'center' });
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(9);
+                doc.text('For any queries, please contact us at the numbers above.', 105, finalY + 12, { align: 'center' });
+
+                doc.save('Invoice_' + invoiceNum + '.pdf');
             }
-            excelData.push(['', '', '', 'Grand Total:', document.getElementById('grand-total').textContent]);
-            
-            excelData.push([]);
-            excelData.push(['Thank you for your business!']);
-            excelData.push(['For any queries, please contact us at the numbers above.']);
-            const ws = XLSX.utils.aoa_to_sheet(excelData);
-            ws['!cols'] = [{ wch: 8 }, { wch: 30 }, { wch: 10 }, { wch: 15 }, { wch: 15 }];
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Invoice');
-            XLSX.writeFile(wb, `Invoice_${invoiceNum}.xlsx`);
-        }
 
-        function exportToDoc() {
-            const invoiceNum = document.getElementById('invoice-number').textContent;
-            const invoiceDate = document.getElementById('invoice-date').textContent;
-            const customerName = document.getElementById('customer-name').value || 'N/A';
-            const customerMobile = document.getElementById('customer-mobile').value || 'N/A';
-            const subtotal = document.getElementById('subtotal').textContent;
-            const discount = document.getElementById('discount-display').textContent;
-            const grandTotal = document.getElementById('grand-total').textContent;
-            const discountValue = parseFloat(discount) || 0;
+            function exportToExcel() {
+                const invoiceNum = document.getElementById('invoice-number').textContent;
+                const customerName = document.getElementById('customer-name').value || 'N/A';
+                const customerMobile = document.getElementById('customer-mobile').value || 'N/A';
+                const date = document.getElementById('invoice-date').textContent;
+                const excelData = [
+                    ['RUDRA ELECTRONICS AND ACCESSORIES'],
+                    ['Khadi Machine, Kumbhari, Solapur, Pin:- 413006'],
+                    ['Tarun Mhanta: +91 9021640473  |  Pravin Fulpati: +91 7083377344'],
+                    ['Email: info.rudra.sur@gmail.com'],
+                    [''],
+                    ['Invoice Number:', invoiceNum, '', 'Date:', date],
+                    ['Customer Name:', customerName, '', 'Mobile:', customerMobile],
+                    [''],
+                    ['S.No', 'Product Name', 'Quantity', 'Price (Rs.)', 'Total (Rs.)']
+                ];
+                products.forEach((product, index) => {
+                    excelData.push([
+                        index + 1,
+                        product.name,
+                        product.qty,
+                        product.price.toFixed(2),
+                        product.total.toFixed(2)
+                    ]);
+                });
 
-            let productRows = '';
-            products.forEach((product, index) => {
-                productRows += `
+                excelData.push([]);
+                excelData.push(['', '', '', 'Subtotal:', document.getElementById('subtotal').textContent]);
+                const discountValue = parseFloat(document.getElementById('discount-display').textContent) || 0;
+                if (discountValue > 0) {
+                    excelData.push(['', '', '', 'Discount:', document.getElementById('discount-display').textContent]);
+                }
+                excelData.push(['', '', '', 'Grand Total:', document.getElementById('grand-total').textContent]);
+
+                excelData.push([]);
+                excelData.push(['Thank you for your business!']);
+                excelData.push(['For any queries, please contact us at the numbers above.']);
+                const ws = XLSX.utils.aoa_to_sheet(excelData);
+                ws['!cols'] = [{ wch: 8 }, { wch: 30 }, { wch: 10 }, { wch: 15 }, { wch: 15 }];
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Invoice');
+                XLSX.writeFile(wb, `Invoice_${invoiceNum}.xlsx`);
+            }
+
+            function exportToDoc() {
+                const invoiceNum = document.getElementById('invoice-number').textContent;
+                const invoiceDate = document.getElementById('invoice-date').textContent;
+                const customerName = document.getElementById('customer-name').value || 'N/A';
+                const customerMobile = document.getElementById('customer-mobile').value || 'N/A';
+                const subtotal = document.getElementById('subtotal').textContent;
+                const discount = document.getElementById('discount-display').textContent;
+                const grandTotal = document.getElementById('grand-total').textContent;
+                const discountValue = parseFloat(discount) || 0;
+
+                let productRows = '';
+                products.forEach((product, index) => {
+                    productRows += `
                 <tr>
                     <td style="border: 1px solid black; padding: 5px;">${index + 1}</td>
                     <td style="border: 1px solid black; padding: 5px;">${product.name}</td>
@@ -884,14 +1188,14 @@
                     <td style="border: 1px solid black; padding: 5px;">Rs.${product.total.toFixed(2)}</td>
                 </tr>
             `;
-            });
+                });
 
-            let discountRow = '';
-            if (discountValue > 0) {
-                discountRow = `<p><strong>Discount:</strong> Rs.${discount}</p>`;
-            }
+                let discountRow = '';
+                if (discountValue > 0) {
+                    discountRow = `<p><strong>Discount:</strong> Rs.${discount}</p>`;
+                }
 
-            const docContent = `
+                const docContent = `
             <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
             <head><meta charset='utf-8'><title>Invoice</title></head>
             <body style="font-family: Arial, sans-serif; color: black; background: white; padding: 20px;">
@@ -940,13 +1244,13 @@
             </body>
             </html>
         `;
-            const blob = new Blob(['\ufeff', docContent], { type: 'application/msword' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url; link.download = `Invoice_${invoiceNum}.doc`;
-            document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url);
-        }
-    </script>
+                const blob = new Blob(['\ufeff', docContent], { type: 'application/msword' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url; link.download = `Invoice_${invoiceNum}.doc`;
+                document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url);
+            }
+        </script>
 </body>
 
 </html>
